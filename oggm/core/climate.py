@@ -109,8 +109,6 @@ def process_custom_climate_data(gdir):
            'baseline_hydro_yr_1': y1}
     gdir.write_pickle(out, 'climate_info')
 
-
-
 @entity_task(log, writes=['gcm_data'])
 def process_equil_ccsm_data(gdir, pi_path=None, filesuffix=''):
     """ Processes and writes climate data for individual input 
