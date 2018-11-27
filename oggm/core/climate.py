@@ -805,6 +805,9 @@ def mb_climate_on_height(gdir, heights, *, time_range=None, year_range=None):
     temperature "energies" (temp above 0) and solid precipitation at the
     required height.
 
+    All MB parameters are considered here! (i.e. melt temp, precip scaling
+    factor, etc.)
+
     Parameters
     ----------
     gdir : GlacierDirectory
@@ -816,7 +819,7 @@ def mb_climate_on_height(gdir, heights, *, time_range=None, year_range=None):
         can provide a [t0, t1] bounds (inclusive).
     year_range : [int, int], optional
         Provide a [y0, y1] year range to get the data for specific
-        (hydrological) years only. Easier to us than the time bounds above.
+        (hydrological) years only. Easier to use than the time bounds above.
 
     Returns
     -------
@@ -904,7 +907,7 @@ def mb_yearly_climate_on_height(gdir, heights, *,
                                 year_range=None, flatten=False):
     """Yearly mass-balance climate of the glacier at a specific height
 
-    The precipitation time series are not corrected!
+    See also: mb_climate_on_height
 
     Parameters
     ----------
@@ -962,7 +965,7 @@ def mb_yearly_climate_on_glacier(gdir, *, year_range=None):
     """Yearly mass-balance climate at all glacier heights,
     multiplied with the flowlines widths. (all in pix coords.)
 
-    The precipitation time series are not corrected!
+    See also: mb_climate_on_height
 
     Parameters
     ----------
@@ -975,9 +978,9 @@ def mb_yearly_climate_on_glacier(gdir, *, year_range=None):
     Returns
     -------
     (years, tempformelt, prcpsol)::
-        - years: array of shape (ny,)
-        - tempformelt:  array of shape (len(heights), ny)
-        - prcpsol:  array of shape (len(heights), ny) (not corrected!)
+        - years: array of shape (ny)
+        - tempformelt:  array of shape (ny)
+        - prcpsol:  array of shape (ny)
     """
 
     flowlines = gdir.read_pickle('inversion_flowlines')
@@ -1182,7 +1185,7 @@ def calving_mb(gdir):
     if not gdir.is_tidewater:
         return 0.
 
-    # Ok. Just take the caving rate from cfg and change its units
+    # Ok. Just take the calving rate from cfg and change its units
     # Original units: km3 a-1, to change to mm a-1 (units of specific MB)
     rho = cfg.PARAMS['ice_density']
     return gdir.inversion_calving_rate * 1e9 * rho / gdir.rgi_area_m2
@@ -1234,7 +1237,7 @@ def local_t_star(gdir, *, ref_df=None, tstar=None, bias=None):
                     if cfg.PARAMS[k] != cfg.PARAMS[vn][k]:
                         raise ValueError('The reference t* you are trying '
                                          'to use was calibrated with '
-                                         'difference MB parameters. You '
+                                         'different MB parameters. You '
                                          'might have to run the calibration '
                                          'manually.')
                 ref_df = cfg.PARAMS['ref_tstars_rgi{}_{}'.format(v, str_s)]
@@ -1400,6 +1403,7 @@ def mu_star_calibration(gdir):
 
     Parameters
     ----------
+    gdir : oggm.GlacierDirectory
     """
 
     # Interpolated data
