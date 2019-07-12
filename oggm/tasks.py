@@ -25,6 +25,7 @@ from oggm.core.climate import process_equil_ccsm_data
 from oggm.core.climate import process_dummy_cru_file
 from oggm.core.gcm_climate import process_gcm_data
 from oggm.core.gcm_climate import process_cesm_data
+from oggm.core.gcm_climate import process_ccsm_data
 from oggm.core.gcm_climate import process_cmip5_data
 from oggm.core.climate import local_t_star
 from oggm.core.climate import mu_star_calibration
